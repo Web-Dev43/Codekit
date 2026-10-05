@@ -1,434 +1,109 @@
 const tools = {
-  qr: {
-    title: "QR Code Generator",
-    desc: "Turn text or a URL into a downloadable QR code.",
-    render: () => `
-      <div class="tool-card">
-        <div class="tool-head"><h2>QR Code Generator</h2><p>Paste a URL or text, then tap Generate.</p></div>
-        <div class="stack">
-          <div><label for="qr-input">Text or URL</label><input id="qr-input" value="https://example.com" placeholder="https://example.com"></div>
-          <div class="actions">
-            <button class="btn" id="qr-generate" type="button">Generate QR Code</button>
-            <button class="btn secondary" id="qr-download" type="button">Download PNG</button>
-          </div>
-          <div id="qr-status" class="status">Ready to generate.</div>
-          <div class="result qr-wrap"><div id="qr-output" class="qr-box"><span>Your QR code will appear here</span></div></div>
-        </div>
-      </div>`,
-    init: () => {
-      const out = document.querySelector("#qr-output");
-      const input = document.querySelector("#qr-input");
-      const status = document.querySelector("#qr-status");
-      const download = document.querySelector("#qr-download");
-
-      const make = () => {
-        out.innerHTML = "";
-        if (typeof QRCode === "undefined") {
-          status.className = "status bad";
-          status.textContent = "QR engine failed to load.";
-          out.textContent = "QR generator unavailable";
-          return;
-        }
-        try {
-          new QRCode(out, {
-            text: input.value.trim() || " ",
-            width: 220,
-            height: 220,
-            correctLevel: QRCode.CorrectLevel.M
-          });
-          status.className = "status good";
-          status.textContent = "QR code generated ✓";
-        } catch (error) {
-          status.className = "status bad";
-          status.textContent = "Could not generate QR code.";
-          out.textContent = "Generation failed";
-          throw error;
-        }
-      };
-
-      document.querySelector("#qr-generate").addEventListener("click", make);
-      download.addEventListener("click", () => {
-        const img = out.querySelector("img");
-        const canvas = out.querySelector("canvas");
-        const src = img?.src || canvas?.toDataURL?.("image/png");
-        if (!src) {
-          status.className = "status bad";
-          status.textContent = "Generate a QR code first.";
-          return;
-        }
-        const link = document.createElement("a");
-        link.href = src;
-        link.download = "codekit-qr.png";
-        link.click();
-      });
-
-      make();
-    }
+  qr:{title:"QR Code Generator",desc:"Turn text or a URL into a downloadable QR code.",cat:"Web",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>QR Code Generator</h2><p>Paste a URL or text, then generate a QR code.</p></div>
+    <div class="stack"><div><label for="qr-input">Text or URL</label><input id="qr-input" value="https://example.com"></div>
+    <div class="actions"><button class="btn" id="qr-generate" type="button">Generate QR Code</button><button class="btn secondary" id="qr-download" type="button">Download PNG</button></div>
+    <div id="qr-status" class="status">Ready.</div><div class="result qr-wrap"><div id="qr-output" class="qr-box">Your QR code will appear here</div></div></div></div>`,
+    init:()=>{const o=$("#qr-output"),i=$("#qr-input"),s=$("#qr-status");const make=()=>{o.innerHTML="";try{new QRCode(o,{text:i.value.trim()||" ",width:220,height:220,correctLevel:QRCode.CorrectLevel.M});s.className="status good";s.textContent="QR code generated ✓"}catch(e){s.className="status bad";s.textContent="Could not generate QR code."}};$("#qr-generate").onclick=make;$("#qr-download").onclick=()=>{const x=o.querySelector("img")?.src||o.querySelector("canvas")?.toDataURL("image/png");if(!x){s.textContent="Generate a QR code first.";return}const a=document.createElement("a");a.href=x;a.download="codekit-qr.png";a.click()};make()}
   },
-
-  json: {
-    title: "JSON Formatter",
-    desc: "Format, validate, and minify JSON.",
-    render: () => `
-      <div class="tool-card">
-        <div class="tool-head"><h2>JSON Formatter</h2><p>Pretty-print JSON or crush it back down to one line.</p></div>
-        <label for="json-input">JSON</label>
-        <textarea id="json-input">{&quot;hello&quot;:&quot;world&quot;,&quot;numbers&quot;:[1,2,3]}</textarea>
-        <div class="actions">
-          <button class="btn" id="json-format" type="button">Format</button>
-          <button class="btn secondary" id="json-minify" type="button">Minify</button>
-        </div>
-        <div id="json-status" class="status"></div>
-      </div>`,
-    init: () => {
-      const input = document.querySelector("#json-input");
-      const status = document.querySelector("#json-status");
-      const run = (pretty) => {
-        try {
-          const data = JSON.parse(input.value);
-          input.value = JSON.stringify(data, null, pretty ? 2 : 0);
-          status.className = "status good";
-          status.textContent = "Valid JSON ✓";
-        } catch (error) {
-          status.className = "status bad";
-          status.textContent = "Invalid JSON: " + error.message;
-        }
-      };
-      document.querySelector("#json-format").addEventListener("click", () => run(true));
-      document.querySelector("#json-minify").addEventListener("click", () => run(false));
-    }
+  json:{title:"JSON Formatter",desc:"Format, validate, and minify JSON.",cat:"Format & Convert",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>JSON Formatter</h2><p>Make JSON readable or compress it.</p></div><label for="json-input">JSON</label><textarea id="json-input">{&quot;hello&quot;:&quot;world&quot;,&quot;numbers&quot;:[1,2,3]}</textarea><div class="actions"><button class="btn" id="json-format" type="button">Format</button><button class="btn secondary" id="json-minify" type="button">Minify</button></div><div id="json-status" class="status"></div></div>`,
+    init:()=>{const i=$("#json-input"),s=$("#json-status");const run=p=>{try{i.value=JSON.stringify(JSON.parse(i.value),null,p?2:0);s.className="status good";s.textContent="Valid JSON ✓"}catch(e){s.className="status bad";s.textContent="Invalid JSON: "+e.message}};$("#json-format").onclick=()=>run(1);$("#json-minify").onclick=()=>run(0)}
   },
-
-  uuid: {
-    title: "UUID Generator",
-    desc: "Generate unique UUID v4 identifiers.",
-    render: () => `
-      <div class="tool-card">
-        <div class="tool-head"><h2>UUID Generator</h2><p>Generate unique IDs for your projects.</p></div>
-        <div class="result"><div id="uuid-value" class="big-value"></div></div>
-        <div class="actions">
-          <button class="btn" id="uuid-generate" type="button">Generate UUID</button>
-          <button class="btn secondary" id="uuid-copy" type="button">Copy</button>
-        </div>
-        <div id="uuid-status" class="status"></div>
-      </div>`,
-    init: () => {
-      const value = document.querySelector("#uuid-value");
-      const status = document.querySelector("#uuid-status");
-      const fallbackUuid = () => {
-        const bytes = crypto.getRandomValues(new Uint8Array(16));
-        bytes[6] = (bytes[6] & 15) | 64;
-        bytes[8] = (bytes[8] & 63) | 128;
-        const hex = [...bytes].map((x) => x.toString(16).padStart(2, "0")).join("");
-        return hex.slice(0, 8) + "-" + hex.slice(8, 12) + "-" + hex.slice(12, 16) + "-" + hex.slice(16, 20) + "-" + hex.slice(20);
-      };
-      const make = () => {
-        value.textContent = crypto.randomUUID ? crypto.randomUUID() : fallbackUuid();
-        status.textContent = "";
-      };
-      document.querySelector("#uuid-generate").addEventListener("click", make);
-      document.querySelector("#uuid-copy").addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(value.textContent);
-          status.className = "status good";
-          status.textContent = "Copied ✓";
-        } catch {
-          status.className = "status bad";
-          status.textContent = "Copy failed. Select the UUID manually.";
-        }
-      });
-      make();
-    }
+  jsonTs:{title:"JSON → TypeScript",desc:"Turn JSON into TypeScript interfaces automatically.",cat:"Format & Convert",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>JSON → TypeScript</h2><p>Paste API JSON and generate typed interfaces without typing every field.</p></div><label for="jts-input">JSON</label><textarea id="jts-input">{&quot;name&quot;:&quot;Bob&quot;,&quot;age&quot;:14,&quot;settings&quot;:{&quot;darkMode&quot;:true}}</textarea><div class="actions"><button class="btn" id="jts-run" type="button">Generate TypeScript</button><button class="btn secondary" id="jts-copy" type="button">Copy</button></div><label for="jts-output">TypeScript</label><textarea id="jts-output" readonly></textarea><div id="jts-status" class="status"></div></div>`,
+    init:()=>{const i=$("#jts-input"),o=$("#jts-output"),s=$("#jts-status");const pascal=x=>x.replace(/[^a-zA-Z0-9]+(.)?/g,(_,c)=>c?c.toUpperCase():"").replace(/^./,c=>c.toUpperCase())||"Root";const type=(v,name,defs)=>{if(Array.isArray(v)){if(!v.length)return"unknown[]";const t=type(v[0],name+"Item",defs);return t+"[]"}if(v===null)return"unknown";if(typeof v!=="object")return typeof v;if(!defs[name]){defs[name]=null;const lines=[];for(const[k,val]of Object.entries(v)){const child=pascal(k);const t=typeof val==="object"&&val!==null?type(val,child,defs):type(val,child,defs);lines.push("  "+k+": "+t+";")}defs[name]=lines}return name};const run=()=>{try{const v=JSON.parse(i.value),defs={};const root=Array.isArray(v)?type(v,"Root",defs):type(v,"Root",defs);const out=[];for(const[n,lines]of Object.entries(defs)){if(lines===null)continue;out.push("export interface "+n+" {\n"+lines.join("\n")+"\n}")}if(!out.length)out.push("export type Root = "+root+";");o.value=out.join("\n\n");s.className="status good";s.textContent="TypeScript generated ✓"}catch(e){s.className="status bad";s.textContent="Invalid JSON: "+e.message}};$("#jts-run").onclick=run;$("#jts-copy").onclick=()=>copy(o.value,s);run()}
   },
-
-  base64: {
-    title: "Base64 Encoder / Decoder",
-    desc: "Encode text to Base64 or decode Base64 back to text.",
-    render: () => `
-      <div class="tool-card">
-        <div class="tool-head"><h2>Base64</h2><p>Encode or decode UTF-8 text.</p></div>
-        <label for="b64-input">Input</label><textarea id="b64-input" placeholder="Type something..."></textarea>
-        <div class="actions">
-          <button class="btn" id="b64-encode" type="button">Encode</button>
-          <button class="btn secondary" id="b64-decode" type="button">Decode</button>
-        </div>
-        <label for="b64-output">Output</label><textarea id="b64-output" readonly></textarea>
-        <div id="b64-status" class="status"></div>
-      </div>`,
-    init: () => {
-      const input = document.querySelector("#b64-input");
-      const output = document.querySelector("#b64-output");
-      const status = document.querySelector("#b64-status");
-      const encoder = new TextEncoder();
-      const decoder = new TextDecoder();
-
-      document.querySelector("#b64-encode").addEventListener("click", () => {
-        const bytes = encoder.encode(input.value);
-        let binary = "";
-        bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-        output.value = btoa(binary);
-        status.className = "status good";
-        status.textContent = "Encoded ✓";
-      });
-
-      document.querySelector("#b64-decode").addEventListener("click", () => {
-        try {
-          const binary = atob(input.value.trim());
-          const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-          output.value = decoder.decode(bytes);
-          status.className = "status good";
-          status.textContent = "Decoded ✓";
-        } catch {
-          status.className = "status bad";
-          status.textContent = "Invalid Base64";
-        }
-      });
-    }
+  uuid:{title:"UUID Generator",desc:"Generate unique UUID v4 identifiers.",cat:"Numbers & IDs",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>UUID Generator</h2><p>Generate unique IDs for apps, databases, files, and more.</p></div><div class="result"><div id="uuid-value" class="big-value"></div></div><div class="actions"><button class="btn" id="uuid-generate" type="button">Generate UUID</button><button class="btn secondary" id="uuid-copy" type="button">Copy</button></div><div id="uuid-status" class="status"></div></div>`,
+    init:()=>{const v=$("#uuid-value"),s=$("#uuid-status");const make=()=>v.textContent=crypto.randomUUID?crypto.randomUUID():[1e7]+-1e3+-4e3+-8e3+-1e11;$("#uuid-generate").onclick=make;$("#uuid-copy").onclick=()=>copy(v.textContent,s);make()}
   },
-
-  url: {
-    title: "URL Encoder",
-    desc: "Safely encode or decode URL components.",
-    render: () => `
-      <div class="tool-card">
-        <div class="tool-head"><h2>URL Encoder</h2><p>Handle spaces, symbols, and other URL characters.</p></div>
-        <label for="url-input">Input</label><textarea id="url-input" placeholder="https://example.com/hello world?x=1&y=2"></textarea>
-        <div class="actions">
-          <button class="btn" id="url-encode" type="button">Encode</button>
-          <button class="btn secondary" id="url-decode" type="button">Decode</button>
-        </div>
-        <label for="url-output">Output</label><textarea id="url-output" readonly></textarea>
-        <div id="url-status" class="status"></div>
-      </div>`,
-    init: () => {
-      const input = document.querySelector("#url-input");
-      const output = document.querySelector("#url-output");
-      const status = document.querySelector("#url-status");
-      const run = (fn) => {
-        try {
-          output.value = fn(input.value);
-          status.className = "status good";
-          status.textContent = "Done ✓";
-        } catch {
-          status.className = "status bad";
-          status.textContent = "Invalid URL text";
-        }
-      };
-      document.querySelector("#url-encode").addEventListener("click", () => run(encodeURIComponent));
-      document.querySelector("#url-decode").addEventListener("click", () => run(decodeURIComponent));
-    }
+  base64:{title:"Base64 Encoder / Decoder",desc:"Encode text to Base64 or decode Base64 back to text.",cat:"Data & Security",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Base64</h2><p>Encode or decode UTF-8 text.</p></div><label for="b64-input">Input</label><textarea id="b64-input"></textarea><div class="actions"><button class="btn" id="b64-encode" type="button">Encode</button><button class="btn secondary" id="b64-decode" type="button">Decode</button></div><label for="b64-output">Output</label><textarea id="b64-output" readonly></textarea><div id="b64-status" class="status"></div></div>`,
+    init:()=>{const i=$("#b64-input"),o=$("#b64-output"),s=$("#b64-status");$("#b64-encode").onclick=()=>{o.value=btoa(String.fromCharCode(...new TextEncoder().encode(i.value)));s.textContent="Encoded ✓"};$("#b64-decode").onclick=()=>{try{o.value=new TextDecoder().decode(Uint8Array.from(atob(i.value.trim()),c=>c.charCodeAt(0)));s.textContent="Decoded ✓"}catch{s.className="status bad";s.textContent="Invalid Base64"}}}
   },
-
-  color: {
-    title: "Color Converter",
-    desc: "Convert HEX colors to RGB and HSL.",
-    render: () => `
-      <div class="tool-card">
-        <div class="tool-head"><h2>Color Converter</h2><p>Drop in a HEX color and get the common formats back.</p></div>
-        <div class="row">
-          <div><label for="color-input">HEX</label><input id="color-input" value="#63e6a3"></div>
-          <div class="result" style="margin:0"><div id="color-values" class="big-value" style="font-size:15px"></div></div>
-        </div>
-        <div id="color-preview" class="color-preview"></div>
-        <div id="color-status" class="status"></div>
-      </div>`,
-    init: () => {
-      const input = document.querySelector("#color-input");
-      const values = document.querySelector("#color-values");
-      const preview = document.querySelector("#color-preview");
-      const status = document.querySelector("#color-status");
-
-      const run = () => {
-        const hex = input.value.trim().replace("#", "");
-        if (!/^[0-9a-fA-F]{6}$/.test(hex)) {
-          status.className = "status bad";
-          status.textContent = "Use a 6-digit HEX color, like #63e6a3.";
-          return;
-        }
-        const r = parseInt(hex.slice(0, 2), 16);
-        const g = parseInt(hex.slice(2, 4), 16);
-        const b = parseInt(hex.slice(4, 6), 16);
-        const rr = r / 255;
-        const gg = g / 255;
-        const bb = b / 255;
-        const max = Math.max(rr, gg, bb);
-        const min = Math.min(rr, gg, bb);
-        const delta = max - min;
-        let h = 0;
-        let s = 0;
-        const l = (max + min) / 2;
-        if (delta) {
-          s = delta / (1 - Math.abs(2 * l - 1));
-          if (max === rr) h = 60 * (((gg - bb) / delta) % 6);
-          else if (max === gg) h = 60 * ((bb - rr) / delta + 2);
-          else h = 60 * ((rr - gg) / delta + 4);
-        }
-        if (h < 0) h += 360;
-        values.textContent = `RGB: ${r}, ${g}, ${b}\nHSL: ${Math.round(h)}°, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%`;
-        preview.style.background = "#" + hex;
-        status.className = "status good";
-        status.textContent = "Valid color ✓";
-      };
-
-      input.addEventListener("input", run);
-      run();
-    }
+  url:{title:"URL Encoder",desc:"Safely encode or decode URL components.",cat:"Data & Security",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>URL Encoder</h2><p>Handle spaces, symbols, and special URL characters.</p></div><label for="url-input">Input</label><textarea id="url-input"></textarea><div class="actions"><button class="btn" id="url-encode" type="button">Encode</button><button class="btn secondary" id="url-decode" type="button">Decode</button></div><label for="url-output">Output</label><textarea id="url-output" readonly></textarea><div id="url-status" class="status"></div></div>`,
+    init:()=>{const i=$("#url-input"),o=$("#url-output"),s=$("#url-status");const run=f=>{try{o.value=f(i.value);s.className="status good";s.textContent="Done ✓"}catch{ s.className="status bad";s.textContent="Invalid text"}};$("#url-encode").onclick=()=>run(encodeURIComponent);$("#url-decode").onclick=()=>run(decodeURIComponent)}
   },
-
-  timestamp: {
-    title: "Timestamp Converter",
-    desc: "Convert Unix timestamps to readable dates and back.",
-    render: () => `
-      <div class="tool-card">
-        <div class="tool-head"><h2>Timestamp Converter</h2><p>Unix time, UTC date, and local date.</p></div>
-        <div class="row">
-          <div><label for="ts-input">Unix timestamp</label><input id="ts-input" inputmode="numeric" placeholder="1760000000"></div>
-          <div><label for="date-input">ISO date</label><input id="date-input" placeholder="2026-10-05T12:00:00Z"></div>
-        </div>
-        <div class="actions">
-          <button class="btn" id="ts-now" type="button">Use current time</button>
-          <button class="btn secondary" id="ts-from-unix" type="button">Timestamp → Date</button>
-          <button class="btn secondary" id="ts-from-date" type="button">Date → Timestamp</button>
-        </div>
-        <div id="ts-output" class="result"></div>
-      </div>`,
-    init: () => {
-      const timestamp = document.querySelector("#ts-input");
-      const dateInput = document.querySelector("#date-input");
-      const output = document.querySelector("#ts-output");
-
-      document.querySelector("#ts-now").addEventListener("click", () => {
-        const now = Date.now();
-        timestamp.value = Math.floor(now / 1000);
-        dateInput.value = new Date(now).toISOString();
-        output.textContent = "Current time loaded ✓";
-      });
-
-      document.querySelector("#ts-from-unix").addEventListener("click", () => {
-        const number = Number(timestamp.value);
-        if (!Number.isFinite(number)) {
-          output.textContent = "Enter a valid Unix timestamp.";
-          return;
-        }
-        const date = new Date(number * 1000);
-        output.textContent = date.toString() + "\nUTC: " + date.toISOString();
-      });
-
-      document.querySelector("#ts-from-date").addEventListener("click", () => {
-        const date = new Date(dateInput.value);
-        if (Number.isNaN(date.getTime())) {
-          output.textContent = "Enter a valid date.";
-          return;
-        }
-        timestamp.value = Math.floor(date.getTime() / 1000);
-        output.textContent = "Unix timestamp: " + timestamp.value;
-      });
-    }
+  urlParser:{title:"URL Parser",desc:"Break a URL into its useful pieces.",cat:"Web",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>URL Parser</h2><p>See protocol, host, path, query, hash, and port.</p></div><label for="up-input">URL</label><input id="up-input" placeholder="https://example.com/page?x=1#top"><div class="actions"><button class="btn" id="up-run" type="button">Parse URL</button></div><div id="up-output" class="result"></div></div>`,
+    init:()=>{const i=$("#up-input"),o=$("#up-output");$("#up-run").onclick=()=>{try{const u=new URL(i.value);o.innerHTML=Object.entries({Protocol:u.protocol,Host:u.host,Hostname:u.hostname,Port:u.port||"(default)",Path:u.pathname,Query:u.search||"(none)",Hash:u.hash||"(none)"}).map(([k,v])=>"<b>"+k+":</b> "+escapeHtml(v)).join("<br>")}catch{o.textContent="Invalid URL."}}}
   },
-
-  shortener: {
-    title: "URL Shortener",
-    desc: "Turn long URLs into compact CodeKit links.",
-    render: () => `
-      <div class="tool-card">
-        <div class="tool-head"><h2>URL Shortener</h2><p>Paste a long URL and CodeKit creates a short link automatically.</p></div>
-        <div class="stack">
-          <div><label for="shortener-input">Long URL</label><input id="shortener-input" type="url" placeholder="https://example.com/a/really/long/url"></div>
-          <div class="actions"><button class="btn" id="shortener-create" type="button">Shorten URL</button></div>
-          <div id="shortener-status" class="status"></div>
-          <div id="shortener-result" class="result" hidden>
-            <label for="shortener-output">Your short URL</label>
-            <input id="shortener-output" readonly>
-            <div class="actions">
-              <button class="btn secondary" id="shortener-copy" type="button">Copy</button>
-              <a id="shortener-open" class="btn secondary" target="_blank" rel="noopener">Open</a>
-            </div>
-            <div id="shortener-destination" class="status"></div>
-          </div>
-        </div>
-      </div>`,
-    init: () => {
-      const input = document.querySelector("#shortener-input");
-      const create = document.querySelector("#shortener-create");
-      const status = document.querySelector("#shortener-status");
-      const result = document.querySelector("#shortener-result");
-      const output = document.querySelector("#shortener-output");
-      const destination = document.querySelector("#shortener-destination");
-      const open = document.querySelector("#shortener-open");
-      const endpoint = "https://fbqzavqemtezakmmysak.supabase.co/functions/v1/shortener";
-
-      create.addEventListener("click", async () => {
-        const value = input.value.trim();
-        if (!value) {
-          status.className = "status bad";
-          status.textContent = "Enter a URL first.";
-          return;
-        }
-        try {
-          const parsed = new URL(value);
-          if (!["http:", "https:"].includes(parsed.protocol)) throw new Error();
-        } catch {
-          status.className = "status bad";
-          status.textContent = "Enter a valid HTTP or HTTPS URL.";
-          return;
-        }
-
-        create.disabled = true;
-        status.className = "status";
-        status.textContent = "Creating short link...";
-        result.hidden = true;
-
-        try {
-          const response = await fetch(endpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: value })
-          });
-          const data = await response.json();
-          if (!response.ok) throw new Error(data.error || "Could not create link.");
-          output.value = window.location.origin + "/" + data.slug;
-          destination.textContent = "Destination: " + data.targetUrl;
-          open.href = output.value;
-          result.hidden = false;
-          status.className = "status good";
-          status.textContent = "Short link created ✓";
-        } catch (error) {
-          status.className = "status bad";
-          status.textContent = error.message || "Shortener unavailable.";
-        } finally {
-          create.disabled = false;
-        }
-      });
-
-      document.querySelector("#shortener-copy").addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(output.value);
-          status.className = "status good";
-          status.textContent = "Copied ✓";
-        } catch {
-          status.className = "status bad";
-          status.textContent = "Copy failed. Select the link manually.";
-        }
-      });
-    }
+  color:{title:"Color Converter",desc:"Convert HEX colors to RGB and HSL.",cat:"Format & Convert",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Color Converter</h2><p>Drop in a HEX color and get RGB and HSL.</p></div><label for="color-input">HEX</label><input id="color-input" value="#63e6a3"><div id="color-preview" class="color-preview"></div><div id="color-values" class="result"></div><div id="color-status" class="status"></div></div>`,
+    init:()=>{const i=$("#color-input"),p=$("#color-preview"),v=$("#color-values"),s=$("#color-status");const run=()=>{const h=i.value.trim().replace("#","");if(!/^[0-9a-f]{6}$/i.test(h)){s.className="status bad";s.textContent="Use a 6-digit HEX color.";return}const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16),a=[r/255,g/255,b/255],mx=Math.max(...a),mn=Math.min(...a),d=mx-mn,l=(mx+mn)/2;let hh=0,ss=0;if(d){ss=d/(1-Math.abs(2*l-1));hh=60*(((mx===a[0]?(a[1]-a[2])/d:mx===a[1]?(a[2]-a[0])/d+2:(a[0]-a[1])/d+4)+6)%6)}p.style.background="#"+h;v.textContent="RGB: "+r+", "+g+", "+b+"\nHSL: "+Math.round(hh)+"°, "+Math.round(ss*100)+"%, "+Math.round(l*100)+"%";s.className="status good";s.textContent="Valid color ✓"};i.oninput=run;run()}
+  },
+  timestamp:{title:"Timestamp Converter",desc:"Convert Unix timestamps to readable dates and back.",cat:"Numbers & IDs",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Timestamp Converter</h2><p>Unix time, UTC date, and local date.</p></div><div class="row"><div><label for="ts-input">Unix timestamp</label><input id="ts-input"></div><div><label for="date-input">ISO date</label><input id="date-input" placeholder="2026-10-05T12:00:00Z"></div></div><div class="actions"><button class="btn" id="ts-now" type="button">Use current time</button><button class="btn secondary" id="ts-from-unix" type="button">Timestamp → Date</button><button class="btn secondary" id="ts-from-date" type="button">Date → Timestamp</button></div><div id="ts-output" class="result"></div></div>`,
+    init:()=>{const t=$("#ts-input"),d=$("#date-input"),o=$("#ts-output");$("#ts-now").onclick=()=>{const n=Date.now();t.value=Math.floor(n/1000);d.value=new Date(n).toISOString();o.textContent="Current time loaded ✓"};$("#ts-from-unix").onclick=()=>{const n=Number(t.value),x=new Date(n*1000);o.textContent=Number.isFinite(n)&&!Number.isNaN(x.getTime())?x.toString()+"\nUTC: "+x.toISOString():"Enter a valid timestamp."};$("#ts-from-date").onclick=()=>{const x=new Date(d.value);if(Number.isNaN(x.getTime())){o.textContent="Enter a valid date.";return}t.value=Math.floor(x.getTime()/1000);o.textContent="Unix timestamp: "+t.value}}
+  },
+  shortener:{title:"URL Shortener",desc:"Turn long URLs into compact CodeKit links.",cat:"Web",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>URL Shortener</h2><p>Make a compact CodeKit link.</p></div><label for="shortener-input">Long URL</label><input id="shortener-input" type="url" placeholder="https://example.com/a/really/long/url"><div class="actions"><button class="btn" id="shortener-create" type="button">Shorten URL</button></div><div id="shortener-status" class="status"></div><div id="shortener-result" class="result" hidden><label for="shortener-output">Short URL</label><input id="shortener-output" readonly><div class="actions"><button class="btn secondary" id="shortener-copy" type="button">Copy</button><a id="shortener-open" class="btn secondary" target="_blank" rel="noopener">Open</a></div></div></div>`,
+    init:()=>{const i=$("#shortener-input"),b=$("#shortener-create"),s=$("#shortener-status"),r=$("#shortener-result"),o=$("#shortener-output"),a=$("#shortener-open"),endpoint="https://fbqzavqemtezakmmysak.supabase.co/functions/v1/shortener";b.onclick=async()=>{try{const u=new URL(i.value.trim());if(!["http:","https:"].includes(u.protocol))throw 0;b.disabled=true;s.textContent="Creating...";const x=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:u.href})}),j=await x.json();if(!x.ok)throw Error(j.error||"Could not create link.");o.value=location.origin+"/"+j.slug;a.href=o.value;r.hidden=false;s.className="status good";s.textContent="Short link created ✓"}catch(e){s.className="status bad";s.textContent=e.message||"Shortener unavailable."}finally{b.disabled=false}};$("#shortener-copy").onclick=()=>copy(o.value,s)}
+  },
+  diff:{title:"Diff Checker",desc:"Compare two texts and see what changed.",cat:"Debug & Inspect",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Diff Checker</h2><p>Compare two versions line by line.</p></div><div class="row"><div><label for="diff-a">Original</label><textarea id="diff-a"></textarea></div><div><label for="diff-b">New</label><textarea id="diff-b"></textarea></div></div><div class="actions"><button class="btn" id="diff-run" type="button">Compare</button></div><div id="diff-out" class="result"></div></div>`,
+    init:()=>{$("#diff-run").onclick=()=>{const a=$("#diff-a").value.split("\n"),b=$("#diff-b").value.split("\n"),m=Math.max(a.length,b.length),rows=[];for(let n=0;n<m;n++){if(a[n]===b[n])rows.push('<div class="diff-same"> '+(n+1)+"  "+escapeHtml(a[n]??"")+"</div>");else{if(a[n]!==undefined)rows.push('<div class="diff-del">− '+(n+1)+"  "+escapeHtml(a[n])+"</div>");if(b[n]!==undefined)rows.push('<div class="diff-add">+ '+(n+1)+"  "+escapeHtml(b[n])+"</div>")}}$("#diff-out").innerHTML=rows.join("")||"Nothing to compare."}}
+  },
+  regex:{title:"Regex Tester",desc:"Test regular expressions against text.",cat:"Debug & Inspect",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Regex Tester</h2><p>Try a pattern and see every match.</p></div><div class="row"><div><label for="rx-pattern">Pattern</label><input id="rx-pattern" placeholder="\\b(cat|dog)\\b"></div><div><label for="rx-flags">Flags</label><input id="rx-flags" value="gi"></div></div><label for="rx-text">Test text</label><textarea id="rx-text"></textarea><div class="actions"><button class="btn" id="rx-run" type="button">Test Regex</button></div><div id="rx-out" class="result"></div></div>`,
+    init:()=>{$("#rx-run").onclick=()=>{try{const r=new RegExp($("#rx-pattern").value,$("#rx-flags").value),t=$("#rx-text").value,m=[...t.matchAll(r)];$("#rx-out").textContent=m.length+" match"+(m.length===1?"":"es")+" found.\n"+m.map((x,n)=>(n+1)+": "+x[0]+" at index "+x.index).join("\n")}catch(e){$("#rx-out").textContent="Regex error: "+e.message}}}
+  },
+  checker:{title:"Code Checker",desc:"Catch common HTML, CSS, and JavaScript mistakes.",cat:"Debug & Inspect",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Code Checker</h2><p>Quick browser-side checks for common mistakes.</p></div><div class="row"><div><label for="check-lang">Language</label><select id="check-lang"><option>JavaScript</option><option>HTML</option><option>CSS</option></select></div><div><label for="check-code">Paste code</label><textarea id="check-code" style="min-height:160px"></textarea></div></div><div class="actions"><button class="btn" id="check-run" type="button">Check Code</button></div><div id="check-out" class="result"></div></div>`,
+    init:()=>{$("#check-run").onclick=()=>{const l=$("#check-lang").value,c=$("#check-code").value,issues=[];if(!c.trim())issues.push("Code is empty.");if(l==="JavaScript"){try{new Function(c); }catch(e){issues.push("JavaScript syntax: "+e.message)}if(/console\.log\(/.test(c))issues.push("Note: console.log is still in the code.")}if(l==="HTML"){const opens=(c.match(/<([a-z][a-z0-9-]*)\b/gi)||[]).map(x=>x.match(/<([a-z][a-z0-9-]*)/i)[1].toLowerCase());const closes=(c.match(/<\/([a-z][a-z0-9-]*)>/gi)||[]).map(x=>x.match(/<\/([a-z][a-z0-9-]*)/i)[1].toLowerCase());if(opens.length>closes.length)issues.push("You may have an unclosed HTML tag.");}if(l==="CSS"&&c.includes("{")!==c.includes("}"))issues.push("CSS braces look unbalanced.");$("#check-out").innerHTML=issues.length?issues.map(x=>"<div class='bad'>• "+escapeHtml(x)+"</div>").join(""):"<div class='good'>No obvious problems found ✓</div>"}}}
+  },
+  formatter:{title:"Code Formatter",desc:"Quickly clean up HTML, CSS, or JavaScript.",cat:"Format & Convert",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Code Formatter</h2><p>Simple local formatting for common code.</p></div><select id="fmt-lang"><option>JavaScript</option><option>CSS</option><option>HTML</option></select><textarea id="fmt-input" placeholder="Paste code here"></textarea><div class="actions"><button class="btn" id="fmt-run" type="button">Format Code</button></div><textarea id="fmt-output" readonly></textarea></div>`,
+    init:()=>{$("#fmt-run").onclick=()=>{const l=$("#fmt-lang").value,c=$("#fmt-input").value;let out=c.replace(/\s*{\s*/g," {\n").replace(/\s*}\s*/g,"\n}\n").replace(/;\s*/g,";\n").replace(/\n{3,}/g,"\n\n");if(l==="HTML")out=c.replace(/></g,">\n<").replace(/\n{3,}/g,"\n\n");$("#fmt-output").value=out.trim()}}
+  },
+  hash:{title:"Hash Generator",desc:"Generate SHA-256 or SHA-512 hashes locally.",cat:"Data & Security",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Hash Generator</h2><p>Turn text into a cryptographic hash in your browser.</p></div><textarea id="hash-input" placeholder="Text to hash"></textarea><select id="hash-algo"><option value="SHA-256">SHA-256</option><option value="SHA-512">SHA-512</option></select><div class="actions"><button class="btn" id="hash-run" type="button">Generate Hash</button></div><div id="hash-out" class="result big-value"></div></div>`,
+    init:()=>{$("#hash-run").onclick=async()=>{const b=await crypto.subtle.digest($("#hash-algo").value,new TextEncoder().encode($("#hash-input").value));$("#hash-out").textContent=[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}}
+  },
+  jwt:{title:"JWT Decoder",desc:"Read the header and payload of a JSON Web Token.",cat:"Data & Security",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>JWT Decoder</h2><p>Decode the readable parts of a JWT. This does not verify its signature.</p></div><textarea id="jwt-input" placeholder="eyJ..."></textarea><div class="actions"><button class="btn" id="jwt-run" type="button">Decode JWT</button></div><div id="jwt-out" class="result"></div></div>`,
+    init:()=>{$("#jwt-run").onclick=()=>{try{const p=$("#jwt-input").value.trim().split(".");if(p.length!==3)throw Error("JWT should have 3 parts.");const dec=x=>JSON.parse(decodeURIComponent(escape(atob(x.replace(/-/g,"+").replace(/_/g,"/")))));$("#jwt-out").textContent="HEADER\n"+JSON.stringify(dec(p[0]),null,2)+"\n\nPAYLOAD\n"+JSON.stringify(dec(p[1]),null,2)}catch(e){$("#jwt-out").textContent="JWT error: "+e.message}}}
+  },
+  csv:{title:"JSON → CSV",desc:"Turn an array of JSON objects into CSV.",cat:"Format & Convert",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>JSON → CSV</h2><p>Convert tabular JSON into spreadsheet-friendly CSV.</p></div><textarea id="csv-input">[{&quot;name&quot;:&quot;Bob&quot;,&quot;age&quot;:14},{&quot;name&quot;:&quot;Sue&quot;,&quot;age&quot;:15}]</textarea><div class="actions"><button class="btn" id="csv-run" type="button">Convert</button><button class="btn secondary" id="csv-copy" type="button">Copy</button></div><textarea id="csv-output" readonly></textarea></div>`,
+    init:()=>{$("#csv-run").onclick=()=>{try{const a=JSON.parse($("#csv-input").value);if(!Array.isArray(a)||!a.length)throw Error("Use an array of objects.");const keys=[...new Set(a.flatMap(x=>Object.keys(x)))],q=x=>'"'+String(x??"").replace(/"/g,'""')+'"';$("#csv-output").value=[keys.map(q).join(","),...a.map(x=>keys.map(k=>q(typeof x[k]==="object"?JSON.stringify(x[k]):x[k])).join(","))].join("\n")}catch(e){$("#csv-output").value=e.message}};$("#csv-copy").onclick=()=>copy($("#csv-output").value)})
+  },
+  sql:{title:"JSON → SQL",desc:"Turn JSON objects into SQL INSERT statements.",cat:"Format & Convert",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>JSON → SQL</h2><p>Generate basic INSERT statements from JSON.</p></div><input id="sql-table" value="users" placeholder="Table name"><textarea id="sql-input">[{&quot;name&quot;:&quot;Bob&quot;,&quot;age&quot;:14}]</textarea><div class="actions"><button class="btn" id="sql-run" type="button">Generate SQL</button><button class="btn secondary" id="sql-copy" type="button">Copy</button></div><textarea id="sql-output" readonly></textarea></div>`,
+    init:()=>{$("#sql-run").onclick=()=>{try{const a=JSON.parse($("#sql-input").value),table=$("#sql-table").value.replace(/[^a-zA-Z0-9_]/g,"");if(!Array.isArray(a)||!a.length||!table)throw Error("Use an array of objects and a table name.");const keys=Object.keys(a[0]);const val=x=>x===null?"NULL":typeof x==="number"||typeof x==="boolean"?String(x):"'"+String(x).replace(/'/g,"''")+"'";$("#sql-output").value=a.map(x=>"INSERT INTO "+table+" ("+keys.join(", ")+") VALUES ("+keys.map(k=>val(x[k])).join(", ")+");").join("\n")}catch(e){$("#sql-output").value=e.message}};$("#sql-copy").onclick=()=>copy($("#sql-output").value)})
+  },
+  base:{title:"Number Base Converter",desc:"Convert numbers between decimal, binary, and hexadecimal.",cat:"Numbers & IDs",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Number Base Converter</h2><p>Translate numbers between bases 2, 10, and 16.</p></div><input id="base-input" value="255"><select id="base-from"><option value="10">Decimal</option><option value="2">Binary</option><option value="16">Hexadecimal</option></select><div class="actions"><button class="btn" id="base-run" type="button">Convert</button></div><div id="base-out" class="result"></div></div>`,
+    init:()=>{$("#base-run").onclick=()=>{const n=parseInt($("#base-input").value.trim(),Number($("#base-from").value));if(Number.isNaN(n)){ $("#base-out").textContent="Invalid number.";return}$("#base-out").textContent="Decimal: "+n+"\nBinary: "+n.toString(2)+"\nHex: "+n.toString(16).toUpperCase()}}
+  },
+  calc:{title:"Developer Calculator",desc:"Quick calculations with a developer-friendly display.",cat:"Numbers & IDs",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Developer Calculator</h2><p>Do quick math without opening another tab.</p></div><input id="calc-input" placeholder="2 * 1024 + 50"><div class="actions"><button class="btn" id="calc-run" type="button">Calculate</button></div><div id="calc-out" class="result big-value"></div></div>`,
+    init:()=>{$("#calc-run").onclick=()=>{const x=$("#calc-input").value.trim();if(!/^[0-9+\-*/%().\s]+$/.test(x)){ $("#calc-out").textContent="Only basic math is allowed.";return}try{const n=Function("return ("+x+")")();$("#calc-out").textContent=Number.isFinite(n)?String(n):"Invalid result."}catch{$("#calc-out").textContent="Could not calculate."}}}
+  },
+  http:{title:"HTTP Status Explainer",desc:"Find out what common HTTP status codes mean.",cat:"Web",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>HTTP Status Explainer</h2><p>Enter a status code and get the human explanation.</p></div><input id="http-input" inputmode="numeric" value="404"><div class="actions"><button class="btn" id="http-run" type="button">Explain</button></div><div id="http-out" class="result"></div></div>`,
+    init:()=>{const map={200:"OK • Request worked.",201:"Created • Something was created.",204:"No Content • Worked, but nothing was returned.",301:"Moved Permanently • The resource moved.",302:"Found • Temporary redirect.",400:"Bad Request • The request was malformed.",401:"Unauthorized • Authentication is needed.",403:"Forbidden • You are not allowed.",404:"Not Found • The thing isn't there.",405:"Method Not Allowed • Wrong HTTP method.",408:"Request Timeout • Server waited too long.",429:"Too Many Requests • Rate limit hit.",500:"Internal Server Error • Server broke.",502:"Bad Gateway • Server got a bad response.",503:"Service Unavailable • Server is unavailable."};$("#http-run").onclick=()=>$("#http-out").textContent=map[$("#http-input").value.trim()]||"Unknown status code. Try a common 3-digit HTTP code."}
+  },
+  markdown:{title:"Markdown Previewer",desc:"Write Markdown and see a quick preview.",cat:"Format & Convert",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Markdown Previewer</h2><p>Write simple Markdown and preview the result.</p></div><textarea id="md-input"># Hello CodeKit\n\n**Bold text**\n\n- One\n- Two</textarea><div id="md-out" class="result markdown"></div></div>`,
+    init:()=>{const i=$("#md-input"),o=$("#md-out");const run=()=>{let x=escapeHtml(i.value).replace(/^### (.*)$/gm,"<h3>$1</h3>").replace(/^## (.*)$/gm,"<h2>$1</h2>").replace(/^# (.*)$/gm,"<h1>$1</h1>").replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>").replace(/\*(.*?)\*/g,"<em>$1</em>").replace(/^- (.*)$/gm,"• $1").replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");o.innerHTML=x};i.oninput=run;run()}
+  },
+  entity:{title:"HTML Entity Encoder",desc:"Make special characters safe for HTML.",cat:"Data & Security",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>HTML Entity Encoder</h2><p>Encode or decode characters like &lt;, &gt;, and &amp;.</p></div><textarea id="ent-input"></textarea><div class="actions"><button class="btn" id="ent-enc" type="button">Encode</button><button class="btn secondary" id="ent-dec" type="button">Decode</button></div><textarea id="ent-output" readonly></textarea></div>`,
+    init:()=>{const i=$("#ent-input"),o=$("#ent-output");$("#ent-enc").onclick=()=>o.value=escapeHtml(i.value);$("#ent-dec").onclick=()=>{const d=document.createElement("textarea");d.innerHTML=i.value;o.value=d.value}}
+  },
+  image64:{title:"Image → Base64",desc:"Turn a local image into a Base64 data URL.",cat:"Data & Security",render:()=>`
+    <div class="tool-card"><div class="tool-head"><h2>Image → Base64</h2><p>Choose an image and get a data URL you can embed.</p></div><input id="img64-input" type="file" accept="image/*"><textarea id="img64-output" readonly></textarea><div class="actions"><button class="btn secondary" id="img64-copy" type="button">Copy</button></div></div>`,
+    init:()=>{const i=$("#img64-input"),o=$("#img64-output");i.onchange=()=>{const f=i.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>o.value=r.result;r.readAsDataURL(f)};$("#img64-copy").onclick=()=>copy(o.value)}
   }
 };
 
-const area = document.querySelector("#tool-area");
-const pageTitle = document.querySelector("#page-title");
-
-function openTool(name) {
-  const tool = tools[name] || tools.qr;
-  document.querySelectorAll(".nav-item").forEach((button) => {
-    button.classList.toggle("active", button.dataset.tool === name);
-  });
-  pageTitle.textContent = tool.title;
-  area.innerHTML = tool.render();
-  if (typeof tool.init === "function") tool.init();
-}
-
-document.querySelectorAll(".nav-item").forEach((button) => {
-  button.addEventListener("click", () => openTool(button.dataset.tool));
-});
-
+function $(s){return document.querySelector(s)}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+async function copy(v,s){try{await navigator.clipboard.writeText(v);if(s){s.className="status good";s.textContent="Copied ✓"}}catch{if(s){s.className="status bad";s.textContent="Copy failed. Select it manually."}}}
+const area=$("#tool-area"),pageTitle=$("#page-title");
+function openTool(name){const t=tools[name]||tools.qr;document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.tool===name));pageTitle.textContent=t.title;area.innerHTML=t.render();t.init?.()}
+document.querySelectorAll(".nav-item").forEach(b=>b.onclick=()=>openTool(b.dataset.tool));
 openTool("qr");
