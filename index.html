@@ -34,6 +34,41 @@
       <section id="tool-area" class="tool-area"></section>
     </main>
   </div>
+  <div id="error-overlay" hidden role="alertdialog" aria-modal="true" aria-labelledby="error-title">
+    <div class="error-panel">
+      <div class="error-icon">!</div>
+      <p class="error-kicker">CODEKIT ERROR</p>
+      <h2 id="error-title">Something broke.</h2>
+      <p id="error-message">CodeKit hit an unexpected error.</p>
+      <pre id="error-details"></pre>
+      <div class="error-actions">
+        <button id="error-reload" class="btn" type="button">Reload CodeKit</button>
+        <button id="error-dismiss" class="btn secondary" type="button">Dismiss</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const overlay = document.getElementById("error-overlay");
+      const message = document.getElementById("error-message");
+      const details = document.getElementById("error-details");
+      const show = (text, detail) => {
+        if (!overlay) return;
+        message.textContent = text || "CodeKit hit an unexpected error.";
+        details.textContent = detail || "";
+        overlay.hidden = false;
+      };
+      window.addEventListener("error", (event) => {
+        show("A JavaScript error stopped part of CodeKit from working.", event.error?.message || event.message || "Unknown error");
+      });
+      window.addEventListener("unhandledrejection", (event) => {
+        const reason = event.reason;
+        show("A background operation failed.", reason?.message || String(reason || "Unknown promise rejection"));
+      });
+      document.getElementById("error-reload")?.addEventListener("click", () => location.reload());
+      document.getElementById("error-dismiss")?.addEventListener("click", () => { overlay.hidden = true; });
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js?v=71100"></script>
   <script src="app.js?v=71100"></script>
 </body>
