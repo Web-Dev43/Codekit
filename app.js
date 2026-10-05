@@ -386,9 +386,9 @@ const tools = {
           });
           const data = await response.json();
           if (!response.ok) throw new Error(data.error || "Could not create link.");
-          output.value = data.shortUrl;
+          output.value = window.location.origin + "/" + data.slug;
           destination.textContent = "Destination: " + data.targetUrl;
-          open.href = data.shortUrl;
+          open.href = output.value;
           result.hidden = false;
           status.className = "status good";
           status.textContent = "Short link created ✓";
