@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CodeKit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">Code<span>Kit</span></div>
+      <p class="side-label">TOOLS</p>
+      <nav id="tool-nav" aria-label="Tools">
+        <button class="nav-item active" data-tool="qr">▣ QR Code</button>
+        <button class="nav-item" data-tool="json">{} JSON Formatter</button>
+        <button class="nav-item" data-tool="uuid">◇ UUID Generator</button>
+        <button class="nav-item" data-tool="base64">⇄ Base64</button>
+        <button class="nav-item" data-tool="url">↗ URL Encoder</button>
+        <button class="nav-item" data-tool="color">● Color Converter</button>
+        <button class="nav-item" data-tool="timestamp">◷ Timestamp</button>
+      </nav>
+      <div class="sidebar-bottom">Tiny tools.<br>Actually useful.</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">CODEKIT</p>
+          <h1 id="page-title">QR Code Generator</h1>
+        </div>
+        <div class="top-note">Developer tools, minus the nonsense.</div>
+      </header>
+
+      <section id="tool-area" class="tool-area"></section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
