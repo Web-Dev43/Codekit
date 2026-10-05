@@ -2,7 +2,7 @@ export async function onRequest(context) {
   const url = new URL(context.request.url);
   const path = url.pathname.replace(/^\/+|\/+$/g, "");
 
-  if (/^[A-Za-z0-9]{7}$/.test(path)) {
+  if (/^[A-Za-z0-9]{5}(?:[A-Za-z0-9]{2})?$/.test(path)) {
     const upstream = await fetch(
       "https://fbqzavqemtezakmmysak.supabase.co/functions/v1/shortener/" + path,
       { redirect: "manual" }
@@ -19,5 +19,5 @@ export async function onRequest(context) {
     });
   }
 
-  return context.env.ASSETS.fetch(context.request);
+  return context.env.ASSETS.fetch(url.pathname === "/" ? new Request(url) : context.request);
 }
