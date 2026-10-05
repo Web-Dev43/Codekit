@@ -1,75 +1,14 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>CodeKit</title>
-  <link rel="stylesheet" href="style.css?v=71101">
-</head>
-<body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="brand">Code<span>Kit</span></div>
-      <p class="side-label">TOOLS</p>
-      <nav id="tool-nav" aria-label="Tools">
-        <button class="nav-item active" data-tool="qr" type="button">▣ QR Code</button>
-        <button class="nav-item" data-tool="json" type="button">{} Format JSON</button>
-        <button class="nav-item" data-tool="uuid" type="button">◇ Make a Unique ID</button>
-        <button class="nav-item" data-tool="base64" type="button">⇄ Text ↔ Base64</button>
-        <button class="nav-item" data-tool="url" type="button">↗ Encode a URL</button>
-        <button class="nav-item" data-tool="color" type="button">● Convert a Color</button>
-        <button class="nav-item" data-tool="timestamp" type="button">◷ Convert a Date</button>
-        <button class="nav-item" data-tool="shortener" type="button">↗ Shorten a URL</button>
-      </nav>
-      <div class="sidebar-bottom">Tiny tools.<br>Actually useful.</div>
-    </aside>
-    <main class="main">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">CODEKIT</p>
-          <h1 id="page-title">QR Code Generator</h1>
-        </div>
-        <div class="top-note">Developer tools, minus the nonsense.</div>
-      </header>
-      <section id="tool-area" class="tool-area"></section>
-    </main>
-  </div>
-  <div id="error-overlay" hidden role="alertdialog" aria-modal="true" aria-labelledby="error-title">
-    <div class="error-panel">
-      <div class="error-icon">!</div>
-      <p class="error-kicker">CODEKIT ERROR</p>
-      <h2 id="error-title">Something broke.</h2>
-      <p id="error-message">CodeKit hit an unexpected error.</p>
-      <pre id="error-details"></pre>
-      <div class="error-actions">
-        <button id="error-reload" class="btn" type="button">Reload CodeKit</button>
-        <button id="error-dismiss" class="btn secondary" type="button">Dismiss</button>
-      </div>
-    </div>
-  </div>
-  <script>
-    (() => {
-      const overlay = document.getElementById("error-overlay");
-      const message = document.getElementById("error-message");
-      const details = document.getElementById("error-details");
-      const show = (text, detail) => {
-        if (!overlay) return;
-        message.textContent = text || "CodeKit hit an unexpected error.";
-        details.textContent = detail || "";
-        overlay.hidden = false;
-      };
-      window.addEventListener("error", (event) => {
-        show("A JavaScript error stopped part of CodeKit from working.", event.error?.message || event.message || "Unknown error");
-      });
-      window.addEventListener("unhandledrejection", (event) => {
-        const reason = event.reason;
-        show("A background operation failed.", reason?.message || String(reason || "Unknown promise rejection"));
-      });
-      document.getElementById("error-reload")?.addEventListener("click", () => location.reload());
-      document.getElementById("error-dismiss")?.addEventListener("click", () => { overlay.hidden = true; });
-    })();
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js?v=71101"></script>
-  <script src="app.js?v=71101"></script>
-</body>
-</html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CodeKit</title><link rel="stylesheet" href="style.css?v=81200"></head>
+<body><div class="app"><aside class="sidebar"><div class="brand">Code<span>Kit</span></div><p class="side-label">TOOLS</p><nav id="tool-nav" aria-label="Tools">
+<div class="nav-group"><div class="nav-group-title">Format & Convert</div><button class="nav-item active" data-tool="qr" type="button">▣ QR Code</button><button class="nav-item" data-tool="json" type="button">{} Format JSON</button><button class="nav-item" data-tool="jsonTs" type="button">→ JSON to TypeScript</button><button class="nav-item" data-tool="csv" type="button">→ JSON to CSV</button><button class="nav-item" data-tool="sql" type="button">→ JSON to SQL</button><button class="nav-item" data-tool="formatter" type="button">✦ Code Formatter</button><button class="nav-item" data-tool="markdown" type="button">M Markdown Preview</button><button class="nav-item" data-tool="color" type="button">● Convert a Color</button></div>
+<div class="nav-group"><div class="nav-group-title">Debug & Inspect</div><button class="nav-item" data-tool="checker" type="button">✓ Code Checker</button><button class="nav-item" data-tool="diff" type="button">↔ Diff Checker</button><button class="nav-item" data-tool="regex" type="button">.* Regex Tester</button><button class="nav-item" data-tool="jwt" type="button">◇ JWT Decoder</button></div>
+<div class="nav-group"><div class="nav-group-title">Data & Security</div><button class="nav-item" data-tool="base64" type="button">⇄ Base64</button><button class="nav-item" data-tool="url" type="button">↗ URL Encoder</button><button class="nav-item" data-tool="hash" type="button"># Hash Generator</button><button class="nav-item" data-tool="entity" type="button">&lt; HTML Entities</button><button class="nav-item" data-tool="image64" type="button">▧ Image to Base64</button></div>
+<div class="nav-group"><div class="nav-group-title">Numbers & IDs</div><button class="nav-item" data-tool="uuid" type="button">◇ Unique ID</button><button class="nav-item" data-tool="timestamp" type="button">◷ Timestamp</button><button class="nav-item" data-tool="base" type="button">101 Number Bases</button><button class="nav-item" data-tool="calc" type="button">∑ Calculator</button></div>
+<div class="nav-group"><div class="nav-group-title">Web</div><button class="nav-item" data-tool="urlParser" type="button">⌁ URL Parser</button><button class="nav-item" data-tool="http" type="button">↯ HTTP Status</button><button class="nav-item" data-tool="shortener" type="button">↗ Shorten URL</button></div>
+</nav><div class="sidebar-bottom">Tiny tools.<br>Actually useful.</div></aside>
+<main class="main"><header class="topbar"><div><p class="eyebrow">CODEKIT</p><h1 id="page-title">QR Code Generator</h1></div><div class="top-note">Developer tools, minus the nonsense.</div></header><section id="tool-area" class="tool-area"></section></main></div>
+<div id="error-overlay" hidden role="alertdialog" aria-modal="true"><div class="error-panel"><div class="error-icon">!</div><p class="error-kicker">CODEKIT ERROR</p><h2>Something broke.</h2><p id="error-message">CodeKit hit an unexpected error.</p><pre id="error-details"></pre><div class="error-actions"><button id="error-reload" class="btn" type="button">Reload CodeKit</button><button id="error-dismiss" class="btn secondary" type="button">Dismiss</button></div></div></div>
+<script>(()=>{const o=document.getElementById("error-overlay"),m=document.getElementById("error-message"),d=document.getElementById("error-details");const show=(x,y)=>{m.textContent=x;d.textContent=y||"";o.hidden=false};window.addEventListener("error",e=>show("A JavaScript error stopped part of CodeKit from working.",e.error?.message||e.message||"Unknown error"));window.addEventListener("unhandledrejection",e=>show("A background operation failed.",e.reason?.message||String(e.reason||"Unknown promise rejection")));document.getElementById("error-reload").onclick=()=>location.reload();document.getElementById("error-dismiss").onclick=()=>o.hidden=true})();</script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js?v=81200"></script><script src="app.js?v=81200"></script></body></html>
