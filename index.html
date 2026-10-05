@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>CodeKit</title>
-  <link rel="stylesheet" href="style.css?v=71100">
+  <link rel="stylesheet" href="style.css?v=71101">
 </head>
 <body>
   <div class="app">
@@ -13,13 +13,13 @@
       <p class="side-label">TOOLS</p>
       <nav id="tool-nav" aria-label="Tools">
         <button class="nav-item active" data-tool="qr" type="button">▣ QR Code</button>
-        <button class="nav-item" data-tool="json" type="button">{} JSON Formatter</button>
-        <button class="nav-item" data-tool="uuid" type="button">◇ UUID Generator</button>
-        <button class="nav-item" data-tool="base64" type="button">⇄ Base64</button>
-        <button class="nav-item" data-tool="url" type="button">↗ URL Encoder</button>
-        <button class="nav-item" data-tool="color" type="button">● Color Converter</button>
-        <button class="nav-item" data-tool="timestamp" type="button">◷ Timestamp</button>
-        <button class="nav-item" data-tool="shortener" type="button">↗ URL Shortener</button>
+        <button class="nav-item" data-tool="json" type="button">{} Format JSON</button>
+        <button class="nav-item" data-tool="uuid" type="button">◇ Make a Unique ID</button>
+        <button class="nav-item" data-tool="base64" type="button">⇄ Text ↔ Base64</button>
+        <button class="nav-item" data-tool="url" type="button">↗ Encode a URL</button>
+        <button class="nav-item" data-tool="color" type="button">● Convert a Color</button>
+        <button class="nav-item" data-tool="timestamp" type="button">◷ Convert a Date</button>
+        <button class="nav-item" data-tool="shortener" type="button">↗ Shorten a URL</button>
       </nav>
       <div class="sidebar-bottom">Tiny tools.<br>Actually useful.</div>
     </aside>
@@ -69,7 +69,7 @@
       document.getElementById("error-dismiss")?.addEventListener("click", () => { overlay.hidden = true; });
     })();
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js?v=71100"></script>
-  <script src="app.js?v=71100"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js?v=71101"></script>
+  <script src="app.js?v=71101"></script>
 </body>
 </html>
