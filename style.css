@@ -44,3 +44,10 @@ textarea{min-height:220px;resize:vertical;font-family:ui-monospace,SFMono-Regula
 .error-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#3a1717;color:#ff6b6b;font-size:24px;font-weight:900;margin-bottom:14px}.error-kicker{margin:0 0 6px;color:#ff6b6b;font-size:10px;font-weight:900;letter-spacing:.16em}.error-panel h2{margin:0 0 8px;font-size:28px;letter-spacing:-.05em}.error-panel p{color:var(--muted)}#error-details{max-height:180px;overflow:auto;white-space:pre-wrap;word-break:break-word;background:#0a0d0b;border:1px solid var(--line);border-radius:10px;padding:12px;color:#ffb0b0;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}.error-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
 img,svg,canvas{max-width:100%}
 @media(max-width:760px){.app{display:block;width:100%;overflow:hidden}.sidebar{width:100%;min-width:0;min-height:auto;border-right:0;border-bottom:1px solid var(--line);padding:14px}.brand{margin:2px 4px 12px}.side-label,.sidebar-bottom{display:none}#tool-nav{display:flex;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}#tool-nav::-webkit-scrollbar{display:none}.nav-item{white-space:nowrap;flex:0 0 auto}.main{width:100%;padding:20px 14px 44px}.topbar{align-items:start;gap:10px}.top-note{display:none}.topbar h1{font-size:30px;overflow-wrap:anywhere}.tool-area{width:100%;padding-top:20px}.tool-card{width:100%;padding:18px}.tool-head h2{font-size:20px}.row{grid-template-columns:minmax(0,1fr)}input,textarea,select{max-width:100%;min-width:0}.btn{min-height:44px}}
+
+.slug-row{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:8px;align-items:center}
+.slug-prefix{height:44px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:11px;background:#090c0a;color:var(--green);font-weight:900}
+.slug-row .btn{min-height:44px}
+.field-hint{margin:7px 0 0;color:var(--muted);font-size:12px}
+.muted{color:var(--muted);font-weight:500}
+@media(max-width:420px){.slug-row{grid-template-columns:30px minmax(0,1fr)}.slug-row .btn{grid-column:2;justify-self:start}}
