@@ -1,10 +1,11 @@
 export async function onRequest(context) {
   const url = new URL(context.request.url);
-  const path = url.pathname.replace(/^\/+|\/+$/g, "");
+  const path = url.pathname.replace(/^\\/+|\\/+$/g, "");
 
-  if (/^[A-Za-z0-9]{5}(?:[A-Za-z0-9]{2})?$/.test(path)) {
+  // Existing random links and user-chosen slugs share the same redirect route.
+  if (/^[A-Za-z0-9][A-Za-z0-9-]{1,38}[A-Za-z0-9]$/.test(path) && path.length >= 3 && path.length <= 40) {
     const upstream = await fetch(
-      "https://fbqzavqemtezakmmysak.supabase.co/functions/v1/shortener/" + path,
+      "https://fbqzavqemtezakmmysak.supabase.co/functions/v1/shortener/" + encodeURIComponent(path),
       { redirect: "manual" }
     );
 
