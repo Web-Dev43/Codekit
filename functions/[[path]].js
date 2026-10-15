@@ -1,19 +1,16 @@
 export async function onRequest(context) {
   const url = new URL(context.request.url);
-  const path = url.pathname.replace(/^\\/+|\\/+$/g, "");
+  const path = url.pathname.replace(/^\/+|\/+$/g, "");
 
-  // Existing random links and user-chosen slugs share the same redirect route.
   if (/^[A-Za-z0-9][A-Za-z0-9-]{1,38}[A-Za-z0-9]$/.test(path) && path.length >= 3 && path.length <= 40) {
     const upstream = await fetch(
       "https://fbqzavqemtezakmmysak.supabase.co/functions/v1/shortener/" + encodeURIComponent(path),
       { redirect: "manual" }
     );
-
     const location = upstream.headers.get("location");
     if (upstream.status >= 300 && upstream.status < 400 && location) {
       return Response.redirect(location, 302);
     }
-
     return new Response("Short link not found.", {
       status: 404,
       headers: { "Content-Type": "text/plain; charset=utf-8" }
