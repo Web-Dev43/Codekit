@@ -2,6 +2,11 @@ export async function onRequest(context) {
   const url = new URL(context.request.url);
   const path = url.pathname.replace(/^\/+|\/+$/g, "");
 
+  // Keep the legacy Cinematiclife slug working on the Cloudflare Pages host.
+  if (path.toLowerCase() === "cinematiclife") {
+    return Response.redirect("https://cooldih67-boop.github.io/Cinematiclife.17/", 302);
+  }
+
   // Only short-link slugs are sent to the redirect service.
   if (/^[A-Za-z0-9][A-Za-z0-9-]{1,38}[A-Za-z0-9]$/.test(path) && path.length >= 3 && path.length <= 40) {
     try {
